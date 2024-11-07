@@ -1,0 +1,99 @@
+# rnfront
+- name: FE react native server setup
+  hosts: rnfront
+  become: true
+  tasks:
+    - name: apt update
+      apt:
+        update_cache: yes
+
+    - name: install nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: nginx start and enable
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+ 
+- name: Clone GitHub repository to rnfront server
+  hosts: rnfront
+  become: yes
+  tasks:
+    - name: Clone the repository
+      git:
+        repo: https://github.com/SSGraeG/ssgeco_frontend_01.git
+        dest: /home/ubuntu/ssgeco_frontend_01
+        version: main
+
+
+    # "sudo apt update -y",
+    # "sudo apt install -y software-properties-common",
+    # "sudo add-apt-repository --yes --update ppa:ansible/ansible",
+    # "sudo apt install -y ansible",
+
+# # 1 fe
+# - hosts: webservers  # 또는 appservers
+#   become: yes        # root 권한으로 실행
+
+#   tasks:
+#   - name: Git 설치
+#     apt:
+#       name: git
+#       state: present
+
+#   - name: Git Clone
+#     git:
+#       repo: <레포지토리_URL>
+#       dest: /var/www/html  # 원하는 디렉토리로 변경
+
+#   - name: 필요한 파일 설치 (예시: npm install)
+#     shell: npm expo install
+#     args:
+#       chdir: /var/www/html
+
+#   - name: 시작
+#     shell: npm expo start
+#     args:
+#       chdir: /var/www/html
+
+
+# # 2 be
+# - hosts: appservers  # 또는 appservers
+#   become: yes        # root 권한으로 실행
+
+#   tasks:
+#   - name: Git 설치
+#     apt:
+#       name: git
+#       state: present
+
+#   - name: Git Clone
+#     git:
+#       repo: <레포지토리_URL>
+#       dest: /var/www/html  # 원하는 디렉토리로 변경
+
+#   - name: 필요한 파일 설치 (예시: python3 app.py)
+#     shell: python3 app.py
+#     args:
+#       chdir: /var/www/html
+
+# tasks:
+# - name: sudo apt get update
+#       git:
+#         repo: https://github.com/SSGraeG/ssgeco_frontend_01.git
+#         dest: /home/ubuntu/ssgeco_frontend_01
+#         version: main  
+
+
+#  # my-app-bucket
+# - name: Download folder from S3
+#   hosts: appservers
+#   become: true
+#   vars:
+#     s3_bucket: project-bucket-kksung
+#     s3_folder: ASG_CICD-AppUserBE-main
+#     local_path: /home/ubuntu/AppUserBE
+
