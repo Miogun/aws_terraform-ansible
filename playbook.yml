@@ -1,3 +1,33 @@
+# rnfront
+- name: FE react native server setup
+  hosts: rnfront
+  become: true
+  tasks:
+    - name: apt update
+      apt:
+        update_cache: yes
+
+    - name: install nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: nginx start and enable
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+ 
+- name: Clone GitHub repository to rnfront server
+  hosts: rnfront
+  become: yes
+  tasks:
+    - name: Clone the repository
+      git:
+        repo: https://github.com/SSGraeG/ssgeco_frontend_01.git
+        dest: /home/ubuntu/ssgeco_frontend_01
+        version: main
+
 - name: Clone GitHub repository to appservers server
   hosts: appservers
   become: yes
