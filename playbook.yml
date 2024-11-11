@@ -1,44 +1,3 @@
-# rnfront
-- name: FE react native server setup
-  hosts: rnfront
-  become: true
-  tasks:
-    - name: apt update
-      apt:
-        update_cache: yes
-
-    - name: install nginx
-      apt:
-        name: nginx
-        state: present
-
-    - name: nginx start and enable
-      systemd:
-        name: nginx
-        state: started
-        enabled: yes
- 
-- name: Clone GitHub repository to rnfront server
-  hosts: rnfront
-  become: yes
-  tasks:
-    - name: Clone the repository
-      git:
-        repo: https://github.com/SSGraeG/ssgeco_frontend_01.git
-        dest: /home/ubuntu/ssgeco_frontend_01
-        version: main
-
-- name: Clone GitHub repository to appservers server
-  hosts: appservers
-  become: yes
-  tasks:
-    - name: Clone the repository
-      git:
-        repo: https://github.com/SSGraeG/ssgeco_backend_01.git
-        dest: /home/ubuntu/ssgeco_backend_01
-        version: main
-
-
 - name: Clone GitHub repository to appservers server
   hosts: appservers
   become: yes
@@ -120,6 +79,130 @@
       shell: echo "This is additional text." >> /path/to/your/file.txt
       args:
         creates: /path/to/your/file.txt
+
+
+# rnfront
+# - name: FE react native server setup
+#   hosts: rnfront
+#   become: true
+#   tasks:
+#     - name: apt update
+#       apt:
+#         update_cache: yes
+
+#     - name: install nginx
+#       apt:
+#         name: nginx
+#         state: present
+
+#     - name: nginx start and enable
+#       systemd:
+#         name: nginx
+#         state: started
+#         enabled: yes
+ 
+# - name: Clone GitHub repository to rnfront server
+#   hosts: rnfront
+#   become: yes
+#   tasks:
+#     - name: Clone the repository
+#       git:
+#         repo: https://github.com/SSGraeG/ssgeco_frontend_01.git
+#         dest: /home/ubuntu/ssgeco_frontend_01
+#         version: main
+
+# - name: Clone GitHub repository to appservers server
+#   hosts: appservers
+#   become: yes
+#   tasks:
+#     - name: Clone the repository
+#       git:
+#         repo: https://github.com/SSGraeG/ssgeco_backend_01.git
+#         dest: /home/ubuntu/ssgeco_backend_01
+#         version: main
+
+
+# - name: Clone GitHub repository to appservers server
+#   hosts: appservers
+#   become: yes
+#   vars:
+#     ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'  # Skip SSH key checking
+#   tasks:
+#     - name: Define repository URL and destination for ec2-private-instance-1
+#       set_fact:
+#         repo_url: "https://github.com/SSGraeG/ssgeco_backend_01.git"
+#         clone_dest: "/home/ubuntu/ssgeco_backend_01_instance1"
+#       when: inventory_hostname == "ec2-private-instance-1"
+
+#     - name: Define repository URL and destination for ec2-private-instance-2
+#       set_fact:
+#         repo_url: "https://github.com/SSGraeG/ssgeco_backend_02.git"
+#         clone_dest: "/home/ubuntu/ssgeco_backend_02_instance2"
+#       when: inventory_hostname == "ec2-private-instance-2"
+      
+#     - name: Clone the repository to the appropriate directory
+#       git:
+#         repo: "{{ repo_url }}"
+#         dest: "{{ clone_dest }}"
+#         version: main
+
+# - name: Create and modify ini file and add text instance-1
+#   hosts: appservers
+#   become: yes
+#   vars:
+#     ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'  # Skip SSH key checking 
+#   tasks:
+#     - name: Create the ini file with basic content
+#       when: inventory_hostname == "ec2-private-instance-1"
+#       copy:
+#         dest: /path/to/your/file.ini
+#         content: |
+#           [section1]
+#           key1=value1
+#           key2=value2
+#         mode: '0644'
+
+#     - name: Add more content to the ini file
+#       when: inventory_hostname == "ec2-private-instance-1"
+#       lineinfile:
+#         path: /path/to/your/file.ini
+#         line: "new_key=new_value"
+#         create: yes
+
+#     - name: Add additional text to a txt file
+#       when: inventory_hostname == "ec2-private-instance-1"
+#       shell: echo "This is additional text." >> /path/to/your/file.txt
+#       args:
+#         creates: /path/to/your/file.txt
+
+# - name: Create and modify ini file and add text instance-2
+#   hosts: appservers
+#   become: yes
+#   vars:
+#     ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'  # Skip SSH key checking
+#   tasks:
+#     - name: Create the ini file with basic content
+#       when: inventory_hostname == "ec2-private-instance-2"
+#       copy:
+#         dest: /path/to/your/file.ini
+#         content: |
+#           [section1]
+#           key1=value1
+#           key2=value2
+#         mode: '0644'
+
+#     - name: Add more content to the ini file
+#       when: inventory_hostname == "ec2-private-instance-2"
+#       lineinfile:
+#         path: /path/to/your/file.ini
+#         line: "new_key=new_value"
+#         create: yes
+
+#     - name: Add additional text to a txt file
+#       when: inventory_hostname == "ec2-private-instance-2"
+#       shell: echo "This is additional text." >> /path/to/your/file.txt
+#       args:
+#         creates: /path/to/your/file.txt
 
 
     # "sudo apt update -y",
