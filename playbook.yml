@@ -34,11 +34,30 @@
   vars:
     ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'  # Skip SSH key checking
   tasks:
+  
+    - name: Create destination directories
+      file:
+        name: "{{ item }}"
+        state: directory
+        mode: '0755'  # Set appropriate permissions
+      with_items:
+        - /home/ubuntu/ssgeco_backend_01_instance1
+      when : inventory_hostname == "ec2-private-instance-1"
+  
     - name: Define repository URL and destination for ec2-private-instance-1
       set_fact:
         repo_url: "https://github.com/SSGraeG/ssgeco_backend_01.git"
         clone_dest: "/home/ubuntu/ssgeco_backend_01_instance1"
       when: inventory_hostname == "ec2-private-instance-1"
+
+    - name: Create destination directories
+      file:
+        name: "{{ item }}"
+        state: directory
+        mode: '0755'  # Set appropriate permissions
+      with_items:
+        - /home/ubuntu/ssgeco_backend_02_instance2
+      when : inventory_hostname == "ec2-private-instance-2"  
 
     - name: Define repository URL and destination for ec2-private-instance-2
       set_fact:
@@ -61,7 +80,7 @@
     - name: Create the ini file with basic content
       when: inventory_hostname == "ec2-private-instance-1"
       copy:
-        dest: /home/ubuntu/ssgeco_frontend_01/file.ini
+        dest: /home/ubuntu/ssgeco_backend_01_instance1/file.ini
         content: |
           [section1]
           key1=value1
@@ -71,15 +90,15 @@
     - name: Add more content to the ini file
       when: inventory_hostname == "ec2-private-instance-1"
       lineinfile:
-        path: /home/ubuntu/ssgeco_frontend_01/file.ini
+        path: /home/ubuntu/ssgeco_backend_01_instance1/file.ini
         line: "new_key=new_value"
         create: yes
 
     - name: Add additional text to a txt file
       when: inventory_hostname == "ec2-private-instance-1"
-      shell: echo "This is additional text." >> /home/ubuntu/ssgeco_frontend_01/file.txt
+      shell: echo "This is additional text." >> /home/ubuntu/ssgeco_backend_01_instance1/file.txt
       args:
-        creates: /home/ubuntu/ssgeco_frontend_01/file.txt
+        creates: /home/ubuntu/ssgeco_backend_01_instance1/file.txt
 
 - name: Create and modify ini file and add text instance-2
   hosts: appservers
@@ -90,7 +109,7 @@
     - name: Create the ini file with basic content
       when: inventory_hostname == "ec2-private-instance-2"
       copy:
-        dest: /home/ubuntu/ssgeco_frontend_02/file.ini
+        dest: /home/ubuntu/ssgeco_backend_02_instance2/file.ini
         content: |
           [section1]
           key1=value1
@@ -100,15 +119,15 @@
     - name: Add more content to the ini file
       when: inventory_hostname == "ec2-private-instance-2"
       lineinfile:
-        path: /home/ubuntu/ssgeco_frontend_02/file.ini
+        path: /home/ubuntu/ssgeco_backend_02_instance2/file.ini
         line: "new_key=new_value"
         create: yes
 
     - name: Add additional text to a txt file
       when: inventory_hostname == "ec2-private-instance-2"
-      shell: echo "This is additional text." >> /home/ubuntu/ssgeco_frontend_02/file.txt
+      shell: echo "This is additional text." >> /home/ubuntu/ssgeco_backend_02_instance2/file.txt
       args:
-        creates: /home/ubuntu/ssgeco_frontend_02/file.txt
+        creates: /home/ubuntu/ssgeco_backend_02_instance2/file.txt
 
 
 # rnfront
@@ -302,4 +321,3 @@
 #     s3_bucket: project-bucket-kksung
 #     s3_folder: ASG_CICD-AppUserBE-main
 #     local_path: /home/ubuntu/AppUserBE
-
