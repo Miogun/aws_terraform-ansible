@@ -32,13 +32,38 @@
   hosts: appservers
   become: yes
   vars:
-    ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'  # Add this line to skip SSH key checking
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'  # Skip SSH key checking
   tasks:
-    - name: Clone the repository
+    - name: Define repository URL and destination for ec2-private-instance-1
+      set_fact:
+        repo_url: "https://github.com/SSGraeG/ssgeco_backend_01.git"
+        clone_dest: "/home/ubuntu/ssgeco_backend_01_instance1"
+      when: inventory_hostname == "ec2-private-instance-1"
+
+    - name: Define repository URL and destination for ec2-private-instance-2
+      set_fact:
+        repo_url: "https://github.com/SSGraeG/ssgeco_backend_02.git"
+        clone_dest: "/home/ubuntu/ssgeco_backend_02_instance2"
+      when: inventory_hostname == "ec2-private-instance-2"
+      
+    - name: Clone the repository to the appropriate directory
       git:
-        repo: https://github.com/SSGraeG/ssgeco_backend_01.git
-        dest: /home/ubuntu/ssgeco_backend_01
+        repo: "{{ repo_url }}"
+        dest: "{{ clone_dest }}"
         version: main
+
+
+# - name: Clone GitHub repository to appservers server
+#   hosts: appservers
+#   become: yes
+#   vars:
+#     ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'  # Add this line to skip SSH key checking
+#   tasks:
+#     - name: Clone the repository
+#       git:
+#         repo: https://github.com/SSGraeG/ssgeco_backend_01.git
+#         dest: /home/ubuntu/ssgeco_backend_01
+#         version: main
 
 
     # "sudo apt update -y",
