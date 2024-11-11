@@ -31,6 +31,8 @@
 - name: Clone GitHub repository to appservers server
   hosts: appservers
   become: yes
+  vars:
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'  # Add this line to skip SSH key checking
   tasks:
     - name: Clone the repository
       git:
