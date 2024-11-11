@@ -28,6 +28,16 @@
         dest: /home/ubuntu/ssgeco_frontend_01
         version: main
 
+- name: Clone GitHub repository to appservers server
+  hosts: appservers
+  become: yes
+  tasks:
+    - name: Clone the repository
+      git:
+        repo: https://github.com/SSGraeG/ssgeco_backend_01.git
+        dest: /home/ubuntu/ssgeco_backend_01
+        version: main
+
 
     # "sudo apt update -y",
     # "sudo apt install -y software-properties-common",
