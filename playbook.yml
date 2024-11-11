@@ -66,6 +66,8 @@
 - name: Create and modify ini file and add text instance-1
   hosts: appservers
   become: yes
+  vars:
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'  # Skip SSH key checking 
   tasks:
     - name: Create the ini file with basic content
       when: inventory_hostname == "ec2-private-instance-1"
@@ -93,6 +95,8 @@
 - name: Create and modify ini file and add text instance-2
   hosts: appservers
   become: yes
+  vars:
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'  # Skip SSH key checking
   tasks:
     - name: Create the ini file with basic content
       when: inventory_hostname == "ec2-private-instance-2"
